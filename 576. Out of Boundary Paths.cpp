@@ -49,6 +49,38 @@ public:
     }
 };
 
+class Solution {
+public:
+    int mod = 1e9 + 7;
+    int M, N;
+    int t[51][51][51];
+
+    int solve(int sr, int sc, int maxMove) {
+        if (sr < 0 || sr >= M || sc < 0 || sc >= N) return 1;
+        if (maxMove < 1) return 0;
+        if (t[maxMove][sr][sc] != -1) return t[maxMove][sr][sc];
+        
+        int res = 0;
+
+        // Loop for right direction
+        res = (res + solve(sr, sc + 1, maxMove - 1)) % mod;
+        // Loop for left direction
+        res = (res + solve(sr, sc - 1, maxMove - 1)) % mod;
+        // Loop for down direction
+        res = (res + solve(sr + 1, sc, maxMove - 1)) % mod;
+        // Loop for up direction
+        res = (res + solve(sr - 1, sc, maxMove - 1)) % mod;
+
+        return t[maxMove][sr][sc] = res % mod;
+    }
+
+    int findPaths(int m, int n, int maxMove, int sr, int sc) {
+        M = m;
+        N = n;
+        memset(t, -1, sizeof(t));
+        return solve(sr, sc, maxMove);
+    }
+};
 
 //Approach-2 (Bottom Up)
 //T.C : O(m * n * maxMove)
