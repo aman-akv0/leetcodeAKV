@@ -1,0 +1,48 @@
+// class Solution {
+// public:
+//     // int n;
+//     int solve(string s, vector<string>& dic){
+//         if(s.size()==0) return 1;
+//         int res=0;
+//         string str="";
+//         for(int i=0; i<s.size();i++){
+//             str+=s[i];
+//             if(find(dic.begin(),dic.end(),str)!=dic.end()){
+//                 res=res|solve(s.substr(i+1),dic);
+//             }
+//         }return res;
+//     }
+//     bool wordBreak(string s, vector<string>& dic) {
+//         // n=s.size();
+//         return solve(s,dic);
+        
+//     }
+// };
+
+
+
+
+
+class Solution {
+public:
+    // int n;
+    int dp[301];
+    int solve(string s, vector<string>& dic, int idx){
+        if(idx>=s.size()) return 1;
+        if(dp[idx] != -1) return dp[idx];
+        if(find(dic.begin(),dic.end(),s)!=dic.end()) return dp[idx]=1;
+
+        for(int i=1; i<=s.size();i++){
+            string str=s.substr(idx,i);
+            if(find(dic.begin(),dic.end(),str)!=dic.end() && solve(s,dic,idx+i)){
+                return dp[idx]=1;
+            }
+        }return dp[idx]=0;
+    }
+    bool wordBreak(string s, vector<string>& dic) {
+        memset(dp,-1,sizeof(dp));
+        // n=s.size();
+        return solve(s,dic,0);
+        
+    }
+};
